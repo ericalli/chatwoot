@@ -6,6 +6,7 @@
         :on-search-submit="onSearchSubmit"
         this-selected-contact-id=""
         :on-input-search="onInputSearch"
+        :on-toggle-create="onToggleCreate"
       />
       <contacts-table
         :contacts="records"
@@ -14,7 +15,7 @@
         :on-click-contact="openContactInfoPanel"
         :active-contact-id="selectedContactId"
       />
-      <contacts-footer
+      <table-footer
         :on-page-change="onPageChange"
         :current-page="Number(meta.currentPage)"
         :total-count="meta.count"
@@ -25,6 +26,7 @@
       :contact="selectedContact"
       :on-close="closeContactInfoPanel"
     />
+    <create-contact :show="showCreateModal" @cancel="onToggleCreate" />
   </div>
 </template>
 
@@ -34,19 +36,21 @@ import { mapGetters } from 'vuex';
 import ContactsHeader from './Header';
 import ContactsTable from './ContactsTable';
 import ContactInfoPanel from './ContactInfoPanel';
-import ContactsFooter from './Footer';
+import CreateContact from 'dashboard/routes/dashboard/conversation/contact/CreateContact';
+import TableFooter from 'dashboard/components/widgets/TableFooter';
 
 export default {
   components: {
     ContactsHeader,
     ContactsTable,
-    ContactsFooter,
+    TableFooter,
     ContactInfoPanel,
+    CreateContact,
   },
   data() {
     return {
       searchQuery: '',
-      showEditModal: false,
+      showCreateModal: false,
       selectedContactId: '',
     };
   },
@@ -122,6 +126,9 @@ export default {
     closeContactInfoPanel() {
       this.selectedContactId = '';
       this.showContactInfoPanelPane = false;
+    },
+    onToggleCreate() {
+      this.showCreateModal = !this.showCreateModal;
     },
   },
 };
